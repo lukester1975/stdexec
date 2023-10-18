@@ -264,8 +264,7 @@ namespace exec {
       // This function first completes all tasks that are ready in the completion queue of the io_uring.
       // Then it completes all tasks that are ready in the given queue of ready tasks.
       // The function returns the number of previously submitted completed tasks.
-      int
-        complete(stdexec::__intrusive_queue<& __task::__next_> __ready = __task_queue{}) noexcept {
+      int complete(stdexec::__intrusive_queue<&__task::__next_> __ready = __task_queue{}) noexcept {
         __u32 __head = __head_.load(std::memory_order_relaxed);
         __u32 __tail = __tail_.load(std::memory_order_acquire);
         int __count = 0;
@@ -449,7 +448,8 @@ namespace exec {
         // Only one thread of execution is allowed to drive the io context.
         if (!__is_running_.compare_exchange_strong(
               expected_running, true, std::memory_order_relaxed)) {
-          throw std::runtime_error("exec::io_uring_context::run() called on a running context");
+          throw std::runtime_error(
+            "exec::io_uring_context::run_until_stopped() called on a running context");
         } else {
           // Check whether we restart the context after a context-wide stop.
           // We have to reset the stop source in this case.
@@ -479,9 +479,14 @@ namespace exec {
           STDEXEC_ASSERT(
             0 <= __n_total_submitted_
             && __n_total_submitted_ <= static_cast<std::ptrdiff_t>(__params_.cq_entries));
+enter:
           int rc = __io_uring_enter(
             __ring_fd_, __n_newly_submitted_, __min_complete, IORING_ENTER_GETEVENTS);
-          __throw_error_code_if(rc < 0, -rc);
+          if (rc < 0) {
+            if (rc == -EINTR)
+              goto enter;
+            throw std::system_error(-rc, std::system_category());
+          }
           STDEXEC_ASSERT(rc <= __n_newly_submitted_);
           __n_newly_submitted_ -= rc;
           __n_total_submitted_ -= __completion_queue_.complete();
