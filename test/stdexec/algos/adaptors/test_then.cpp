@@ -186,7 +186,7 @@ namespace {
   using my_string_sender_t = decltype(ex::transfer_just(inline_scheduler{}, std::string{}));
 
   template <class Fun>
-  auto tag_invoke(ex::then_t, inline_scheduler sched, my_string_sender_t, Fun) {
+  auto tag_invoke(ex::then_t, inline_scheduler, my_string_sender_t, Fun) {
     return ex::just(std::string{"hallo"});
   }
 
@@ -199,7 +199,7 @@ namespace {
 
   struct my_domain {
     template <ex::sender_expr_for<ex::then_t> Sender, class... Env>
-    static auto transform_sender(Sender snd, const Env&...) {
+    static auto transform_sender(Sender, const Env&...) {
       return ex::just(std::string{"hallo"});
     }
   };

@@ -214,7 +214,7 @@ namespace {
     impulse_scheduler sched;
 
     ex::sender auto snd = ex::just(my_type(&param_destructed)) //
-                        | ex::let_value([&](const my_type& obj) {
+                        | ex::let_value([&](const my_type&) {
                             CHECK_FALSE(param_destructed);
                             fun_called = true;
                             return ex::transfer_just(sched, 13);
@@ -306,7 +306,7 @@ namespace {
   using my_string_sender_t = decltype(ex::transfer_just(inline_scheduler{}, std::string{}));
 
   template <typename Fun>
-  auto tag_invoke(ex::let_value_t, inline_scheduler sched, my_string_sender_t, Fun) {
+  auto tag_invoke(ex::let_value_t, inline_scheduler, my_string_sender_t, Fun) {
     return ex::just(std::string{"hallo"});
   }
 

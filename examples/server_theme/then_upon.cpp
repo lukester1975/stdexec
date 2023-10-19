@@ -124,7 +124,7 @@ classification_result do_classify(image img) {
 }
 
 // Check for errors and transform them into classification result
-classification_result on_classification_error(std::exception_ptr ex) {
+classification_result on_classification_error(std::exception_ptr) {
   return {obj_type::general_error, 100, {}};
 }
 

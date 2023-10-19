@@ -686,7 +686,7 @@ namespace {
       using completion_signatures = ex::completion_signatures<ex::set_value_t()>;
 
       template <ex::receiver R>
-      friend operation<R> tag_invoke(ex::connect_t, sender self, R r) {
+      friend operation<R> tag_invoke(ex::connect_t, sender, R r) {
         return {{}, (R&&) r};
       }
 
