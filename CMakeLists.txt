@@ -166,7 +166,7 @@ add_library(stdexec_executable_flags INTERFACE)
 
 # Enable warnings
 target_compile_options(stdexec_executable_flags INTERFACE
-                       $<$<STREQUAL:${stdexec_compiler_frontend},GNU>:-Wall>
+                       $<$<STREQUAL:${stdexec_compiler_frontend},GNU>:-Wall -Wextra -Wpedantic -Wno-missing-field-initializers>
                        $<$<STREQUAL:${stdexec_compiler_frontend},AppleClang>:-Wall>
                        $<$<STREQUAL:${stdexec_compiler_frontend},MSVC>:/W4>)
 
