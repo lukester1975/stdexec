@@ -318,7 +318,7 @@ namespace exec {
 #endif
       }
 
-      static void __complete_(__task* __pointer, const ::io_uring_cqe& __entry) noexcept {
+      static void __complete_(__task* __pointer, const ::io_uring_cqe&) noexcept {
         __wakeup_operation& __self = *static_cast<__wakeup_operation*>(__pointer);
         __self.start();
       }
@@ -715,7 +715,7 @@ namespace exec {
           return {};
         }
 
-        static constexpr void submit(::io_uring_sqe& __entry) noexcept {
+        static constexpr void submit(::io_uring_sqe&) noexcept {
         }
 
         void complete(const ::io_uring_cqe& __cqe) noexcept {
@@ -1139,7 +1139,7 @@ namespace exec {
       }
 
       friend std::chrono::time_point<std::chrono::steady_clock>
-        tag_invoke(exec::now_t, const __scheduler& __sched) noexcept {
+        tag_invoke(exec::now_t, const __scheduler&) noexcept {
         return std::chrono::steady_clock::now();
       }
 

@@ -4956,7 +4956,7 @@ namespace stdexec {
 
       template <sender_expr_for<_LetTag> _Sender, class _Env>
         requires same_as<__early_domain_of_t<_Sender>, dependent_domain>
-      static decltype(auto) transform_sender(_Sender&& __sndr, const _Env& __env) {
+      static decltype(auto) transform_sender(_Sender&& __sndr, const _Env&) {
         return __sexpr_apply(
           (_Sender&&) __sndr,
           [&]<class _Fun, sender_in<_Env> _Child>(__ignore, _Fun&& __fun, _Child&& __child) {
@@ -5760,7 +5760,7 @@ namespace stdexec {
     }
 
     template <class _Env>
-    auto __make_transform_fn(const _Env& __env) {
+    auto __make_transform_fn(const _Env&) {
       return [&]<class _Scheduler, class... _Values>(_Scheduler&& __sched, _Values&&... __vals) {
         return transfer(just((_Values&&) __vals...), (_Scheduler&&) __sched);
       };
@@ -6692,7 +6692,7 @@ namespace stdexec {
       }
 
       template <class _Sender, class _Env>
-      static auto transform_sender(_Sender&& __sndr, const _Env& __env) {
+      static auto transform_sender(_Sender&& __sndr, const _Env&) {
         // transform the when_all_with_variant into a regular when_all (looking for
         // early when_all customizations), then transform it again to look for
         // late customizations.
@@ -6729,7 +6729,7 @@ namespace stdexec {
       }
 
       template <class _Sender, class _Env>
-      static auto transform_sender(_Sender&& __sndr, const _Env& __env) {
+      static auto transform_sender(_Sender&& __sndr, const _Env&) {
         // transform the transfer_when_all into a regular transform | when_all
         // (looking for early customizations), then transform it again to look for
         // late customizations.
@@ -6768,7 +6768,7 @@ namespace stdexec {
       }
 
       template <class _Sender, class _Env>
-      static auto transform_sender(_Sender&& __sndr, const _Env& __env) {
+      static auto transform_sender(_Sender&& __sndr, const _Env&) {
         // transform the transfer_when_allwith_variant into regular transform_when_all
         // and into_variant calls/ (looking for early customizations), then transform it
         // again to look for late customizations.

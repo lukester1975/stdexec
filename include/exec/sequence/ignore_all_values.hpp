@@ -290,7 +290,7 @@ namespace exec {
       using __completion_sigs = __sequence_completion_signatures_of_t<_Sequence, _Env>;
 
       template <sender_expr_for<ignore_all_values_t> _Sender, class _Env>
-      static auto get_completion_signatures(_Sender&& __sndr, _Env&&)
+      static auto get_completion_signatures(_Sender&&, _Env&&)
         -> __completion_sigs<__child_of<_Sender>, _Env> {
         return {};
       }
