@@ -560,6 +560,7 @@ namespace stdexec {
         return tag_invoke(as_awaitable, (_Ty&&) __value, *this);
       }
 
+      template <typename>
       friend auto tag_invoke(get_env_t, const __env_promise&) noexcept -> const _Env&;
     };
 
